@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
-    <footer>
-      <div className="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
-        <aside>
+    <footer className="max-h-[470px] text-white">
+      <div className="footer sm:footer-horizontal bg-base-300 text-base-content bg-indigo-900 text-white p-10">
+        <aside className="items-center mx-auto">
           <svg
             width="50"
             height="50"
@@ -20,7 +20,7 @@ const Footer = () => {
             Providing reliable tech since 1992
           </p>
         </aside>
-        <nav>
+        <nav className="mx-auto">
           <h6 className="footer-title">Social</h6>
           <div className="grid grid-flow-col gap-4">
             <a>
@@ -59,7 +59,7 @@ const Footer = () => {
           </div>
         </nav>
       </div>
-      <div className="footer sm:footer-horizontal footer-center bg-neutral text-neutral-content p-4">
+      <div className="footer sm:footer-horizontal footer-center bg-black text-neutral-content max-h[70px] p-4">
         <aside>
           <p>
             Copyright © {new Date().getFullYear()} - All right reserved by ACME
