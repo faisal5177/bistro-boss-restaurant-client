@@ -28,11 +28,8 @@ const Testimonials = () => {
                 value={review.rating}
                 readOnly
               />
-              <h3 className="text-2xl font-semibold">{review.name}</h3>
               <p className="text-center py-8">{review.details}</p>
-              <p className="text-2xl text-orange-400">
-                Rating: {review.rating}
-              </p>
+              <h3 className="text-2xl text-orange-400 font-semibold">{review.name}</h3>
             </div>
           </SwiperSlide>
         ))}

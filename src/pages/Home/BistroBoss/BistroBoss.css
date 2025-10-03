@@ -1,0 +1,12 @@
+.bistroBoss-img{
+  background-image: url('../../../assets/home/chef-service.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 400px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+
+  transition: transform 0.3s ease;
+
+}
