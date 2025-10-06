@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Cover = ({ img, title }) => {
   return (
     <div>
@@ -18,9 +20,9 @@ const Cover = ({ img, title }) => {
         </div>
       </div>
         <div className="flex justify-center mt-10">
-        <button className="btn btn-outline border-0 border-b-4 border-black-600">
+        <Link to='/order' className="btn btn-outline border-0 border-b-4 border-black-600">
         ORDER YOUR FAVOURITE FOOD
-      </button>
+      </Link>
         </div>
     </div>
   );

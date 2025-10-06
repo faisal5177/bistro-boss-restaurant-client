@@ -1,5 +1,6 @@
 import SectionTitle from '../../../componenets/SectionTitle/SectionTitle';
 import recommendsImg from '../../../assets/home/slide5.jpg';
+import { Link } from 'react-router-dom';
 
 const RecommendsMenu = () => {
   return (
@@ -44,9 +45,9 @@ const RecommendsMenu = () => {
               Lettuce, Eggs, Parmesan Cheese, Chicken Breast Fillets.
             </p>
             <div className="card-actions justify-center mt-4">
-              <button className="btn btn-outline border-0 border-b-4 border-orange-400">
+              <Link to='/menu' className="btn btn-outline border-0 border-b-4 border-orange-400">
                 Add To Cart
-              </button>
+              </Link>
             </div>
           </div>
         </div>
