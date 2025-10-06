@@ -1,15 +1,19 @@
-import Banner from "../Banner/Banner";
-import BistroBoss from "../BistroBoss/BistroBoss";
-import Category from "../Category/Category";
-import Contact from "../Contact/Contact";
-import Featured from "../Featured/Featured";
-import PopularMenu from "../PopularMenu/PopularMenu";
-import Testimonials from "../Testimonials/Testimonials";
+import Banner from '../Banner/Banner';
+import BistroBoss from '../BistroBoss/BistroBoss';
+import Category from '../Category/Category';
+import Contact from '../Contact/Contact';
+import Featured from '../Featured/Featured';
+import PopularMenu from '../PopularMenu/PopularMenu';
+import Testimonials from '../Testimonials/Testimonials';
 import RecommendsMenu from './../RecommendsMenu/RecommendsMenu';
+import { Helmet } from 'react-helmet-async';
 
 const Home = () => {
   return (
     <div>
+      <Helmet>
+        <title>Bistro Boss | Home</title>
+      </Helmet>
       <Banner></Banner>
       <Category></Category>
       <BistroBoss></BistroBoss>
