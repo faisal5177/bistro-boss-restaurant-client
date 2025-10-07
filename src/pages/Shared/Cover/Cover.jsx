@@ -20,7 +20,7 @@ const Cover = ({ img, title }) => {
         </div>
       </div>
         <div className="flex justify-center mt-10">
-        <Link to='/order' className="btn btn-outline border-0 border-b-4 border-black-600">
+        <Link to={`/order/${title}`} className="btn btn-outline border-0 border-b-4 border-black-600">
         ORDER YOUR FAVOURITE FOOD
       </Link>
         </div>

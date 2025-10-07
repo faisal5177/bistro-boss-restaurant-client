@@ -18,7 +18,7 @@ const FoodCard = ({ item }) => {
         </h2>
         <p className="text-gray-600">{recipe}</p>
         <div className="card-actions justify-center mt-4">
-          <Link to='/order' className="btn btn-outline border-0 border-b-4 border-orange-400">
+          <Link to='/order' className="btn btn-outline border-0 border-b-4 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white">
             Add To Cart
           </Link>
         </div>
