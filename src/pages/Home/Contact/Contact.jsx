@@ -1,7 +1,7 @@
 
 const Contact = () => {
   return (
-    <div className="text-center bg-contact bg-fixed bg-cover bg-center p-20 text-white bg-black flex gap-3 text-3xl font-bold items-center justify-center">
+    <div className="text-center bg-contact bg-fixed bg-cover bg-center p-20 text-white bg-black flex gap-3 text-3xl font-bold items-center justify-center my-10">
       <p>Call Us:</p>
       <p>+</p>
       <p className="-mt-2">8

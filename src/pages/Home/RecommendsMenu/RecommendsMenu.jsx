@@ -24,7 +24,7 @@ const RecommendsMenu = () => {
             </p>
             <div className="card-actions justify-center mt-4">
               <Link
-                to="/order"
+                to="/order/salad"
                 className="btn btn-outline border-0 border-b-4 border-orange-400 text-orange-400 hover:bg-orange-400 hover:text-white"
               >
                 Add To Cart

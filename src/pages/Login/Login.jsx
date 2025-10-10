@@ -1,142 +1,162 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import {
   loadCaptchaEnginge,
   LoadCanvasTemplate,
   validateCaptcha,
 } from 'react-simple-captcha';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
-import { MdOutlineLockReset } from 'react-icons/md';
-import loginImage from '../../assets/others/authentication2.png';
-import './Login.css';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
+import Swal from 'sweetalert2';
+import { AuthContext } from '../../providers/AuthProvider';
+import { FiEye, FiEyeOff } from 'react-icons/fi'; // 👈 Import icons
 
 const Login = () => {
-  const captchaRef = useRef(null);
   const [disabled, setDisabled] = useState(true);
-  const [showPassword, setShowPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false); // 👈 Show/Hide password state
+  const { signIn } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/';
 
   useEffect(() => {
     loadCaptchaEnginge(6);
   }, []);
 
-  // Handle form submission
   const handleLogin = (event) => {
     event.preventDefault();
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    const captchaValue = captchaRef.current.value;
-
-    if (!validateCaptcha(captchaValue)) {
-      alert('Captcha does not match. Please try again.');
-      captchaRef.current.value = '';
-      setDisabled(true);
-      return;
-    }
-
-    console.log('Email:', email);
-    console.log('Password:', password);
-    alert('Captcha matched! Logging in...');
-    form.reset();
-    setDisabled(true);
+    console.log(email, password);
+    signIn(email, password)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+        Swal.fire({
+          title: 'User Login Successful.',
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown',
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp',
+          },
+        });
+        navigate(from, { replace: true });
+      })
+      .catch((error) => {
+        console.error('Login Error:', error.message);
+        Swal.fire({
+          icon: 'error',
+          title: 'Login Failed',
+          text: error.message,
+        });
+      });
   };
 
-  // Validate captcha and enable login button
   const handleValidateCaptcha = (e) => {
-    e.preventDefault();
-    const userCaptchaValue = captchaRef.current.value;
-    if (validateCaptcha(userCaptchaValue)) {
+    const user_captcha_value = e.target.value;
+    if (validateCaptcha(user_captcha_value)) {
       setDisabled(false);
-      alert('Captcha Matched');
     } else {
       setDisabled(true);
-      alert('Captcha does not match');
     }
   };
 
   return (
-    <div className="hero bg-loginImg mx-auto min-h-screen">
-      <div className="hero-content flex-col lg:flex-row-reverse gap-20">
-        {/* Login Image Section */}
-        <div className="card md:w-[648px] md:h-[455px]">
-          <form onSubmit={handleLogin} className="card-body -mt-10 w-full max-w-md">
-            <fieldset className="fieldset space-y-4">
-              {/* Email */}
-              <div>
-                <label className="label">Email</label>
+    <>
+      <Helmet>
+        <title>Bistro Boss | Login</title>
+      </Helmet>
+      <div className="hero min-h-screen bg-base-200">
+        <div className="hero-content flex-col md:flex-row-reverse">
+          <div className="text-center md:w-1/2 lg:text-left">
+            <h1 className="text-5xl font-bold">Login now!</h1>
+            <p className="py-6">
+              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
+              et a id nisi.
+            </p>
+          </div>
+          <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+            <form onSubmit={handleLogin} className="card-body">
+              {/* Email Field */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Email</span>
+                </label>
                 <input
                   type="email"
                   name="email"
-                  className="input input-bordered w-full"
-                  placeholder="Email"
+                  placeholder="email"
+                  className="input input-bordered"
                   required
                 />
               </div>
 
-              {/* Password with toggle */}
-              <div>
-                <label className="label">Password</label>
+              {/* Password Field with Toggle */}
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text">Password</span>
+                </label>
                 <div className="relative">
                   <input
                     type={showPassword ? 'text' : 'password'}
                     name="password"
+                    placeholder="password"
                     className="input input-bordered w-full pr-10"
-                    placeholder="Password"
                     required
                   />
                   <span
-                    className="absolute right-3 top-3 cursor-pointer text-xl text-gray-600"
+                    className="absolute top-3 right-3 text-xl cursor-pointer text-gray-500"
                     onClick={() => setShowPassword(!showPassword)}
                     title={showPassword ? 'Hide Password' : 'Show Password'}
                   >
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </span>
                 </div>
-              </div>
-
-              {/* Forgot Password (UI Only) */}
-              <div className="flex items-center gap-2 text-sm text-blue-600 cursor-pointer hover:underline mt-2">
-                <MdOutlineLockReset className="text-lg" />
-                <span>Forgot password?</span>
+                <label className="label">
+                  <a href="#" className="label-text-alt link link-hover">
+                    Forgot password?
+                  </a>
+                </label>
               </div>
 
               {/* Captcha */}
-              <div>
-                <LoadCanvasTemplate />
+              <div className="form-control">
+                <label className="label">
+                  <LoadCanvasTemplate />
+                </label>
                 <input
+                  onBlur={handleValidateCaptcha}
                   type="text"
-                  ref={captchaRef}
                   name="captcha"
-                  placeholder="Type the captcha above"
-                  className="input input-bordered mt-2 w-full"
-                  required
+                  placeholder="type the captcha above"
+                  className="input input-bordered"
                 />
-                <button
-                  onClick={handleValidateCaptcha}
-                  className="btn btn-accent mt-3 w-full"
-                  type="button"
-                >
-                  Validate Captcha
-                </button>
               </div>
 
-              {/* Submit */}
-              <input
-                type="submit"
-                value="Login"
-                className="btn btn-neutral mt-4 w-full"
-                disabled={disabled}
-              />
-            </fieldset>
-          </form>
-        </div>
+              {/* Submit Button */}
+              <div className="form-control mt-6">
+                <input
+                  disabled={disabled}
+                  className="btn btn-primary"
+                  type="submit"
+                  value="Login"
+                />
+              </div>
 
-        {/* Login Form Section */}
-
-        <div className="text-center p-20 lg:text-left">
-          <img src={loginImage} alt="Login Illustration" />
+              {/* Signup Link */}
+              <p className="text-center mx-auto">
+                <small>
+                  New Here? <Link to="/signup">Create an account</Link>{' '}
+                </small>
+              </p>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

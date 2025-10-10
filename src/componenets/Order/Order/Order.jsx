@@ -11,9 +11,9 @@ import { Helmet } from 'react-helmet-async';
 
 const Order = () => {
   const categories = ['salad', 'pizza', 'soup', 'dessert', 'drinks'];
-  const { category } = useParams();
+  const { category } = useParams(); // get dynamic :category from URL
 
-  // Safe default: if category not found, use 0
+  // Set the correct tab based on category from URL
   const initialIndex = categories.indexOf(category);
   const [tabIndex, setTabIndex] = useState(
     initialIndex === -1 ? 0 : initialIndex
@@ -21,7 +21,7 @@ const Order = () => {
 
   const [menu] = useMenu();
 
-  // Re-set tabIndex if the URL changes (optional, but useful)
+  // Update tabIndex if category in URL changes
   useEffect(() => {
     const newIndex = categories.indexOf(category);
     if (newIndex !== -1) {
@@ -37,9 +37,9 @@ const Order = () => {
   const drinks = menu.filter((item) => item.category === 'drinks');
 
   return (
-    <div className=" mx-auto text-center">
+    <div className="mx-auto text-center">
       <Helmet>
-        <title>Bistro Boos | Order Food</title>
+        <title>Bistro Boss | Order Food</title>
       </Helmet>
       <Cover img={orderCoverImg} title="Order Food" />
 
@@ -59,19 +59,15 @@ const Order = () => {
         <TabPanel>
           <OrderTab items={salad} />
         </TabPanel>
-
         <TabPanel>
           <OrderTab items={pizza} />
         </TabPanel>
-
         <TabPanel>
           <OrderTab items={soup} />
         </TabPanel>
-
         <TabPanel>
           <OrderTab items={dessert} />
         </TabPanel>
-
         <TabPanel>
           <OrderTab items={drinks} />
         </TabPanel>
