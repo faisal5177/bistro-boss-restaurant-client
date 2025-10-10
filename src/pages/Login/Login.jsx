@@ -8,11 +8,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../providers/AuthProvider';
-import { FiEye, FiEyeOff } from 'react-icons/fi'; // 👈 Import icons
+import { FiEye, FiEyeOff } from 'react-icons/fi';
+import LoginImg from '../../assets/others/authentication2.png';
+import '../../pages/Login/Login.css';
 
 const Login = () => {
   const [disabled, setDisabled] = useState(true);
-  const [showPassword, setShowPassword] = useState(false); // 👈 Show/Hide password state
+  const [showPassword, setShowPassword] = useState(false);
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
@@ -70,15 +72,8 @@ const Login = () => {
       </Helmet>
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col md:flex-row-reverse">
-          <div className="text-center md:w-1/2 lg:text-left">
-            <h1 className="text-5xl font-bold">Login now!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
-          </div>
-          <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+           <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+            <h1 className="text-3xl text-center pt-10 font-bold">Login now!</h1>
             <form onSubmit={handleLogin} className="card-body">
               {/* Email Field */}
               <div className="form-control">
@@ -153,6 +148,10 @@ const Login = () => {
                 </small>
               </p>
             </form>
+          </div>
+          {/* Login Image  */}
+          <div className="text-center md:w-1/2 lg:text-left">
+            <img src={LoginImg} alt="" />
           </div>
         </div>
       </div>
