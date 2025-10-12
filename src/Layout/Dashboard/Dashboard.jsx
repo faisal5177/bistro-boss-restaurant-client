@@ -7,8 +7,10 @@ import {
   FaShoppingCart,
 } from 'react-icons/fa';
 import { NavLink, Outlet } from 'react-router-dom';
+import useCart from '../../hooks/useCart';
 
 const Dashboard = () => {
+  const [cart] = useCart();
   return (
     <div className="flex">
       {/* Dashboard Side Bar */}
@@ -43,8 +45,8 @@ const Dashboard = () => {
           </li>
           <li>
             <NavLink to="/dashboard/cart">
-              <FaShoppingCart></FaShoppingCart>
-              My Cart
+              <FaShoppingCart />
+              My Cart ({cart.length}) 
             </NavLink>
           </li>
           <li>
@@ -60,16 +62,16 @@ const Dashboard = () => {
             </NavLink>
           </li>
           <div className="divider"></div>
-           <li>
+          <li>
             <NavLink to="/">
               <FaHome></FaHome>
-               Home
+              Home
             </NavLink>
           </li>
-           <li>
+          <li>
             <NavLink to="/order/salad">
               <FaSearch></FaSearch>
-               Menu
+              Menu
             </NavLink>
           </li>
         </ul>

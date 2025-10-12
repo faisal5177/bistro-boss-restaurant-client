@@ -1,10 +1,12 @@
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import useCart from '../../../hooks/useCart';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Cart = () => {
   const [cart, refetch] = useCart();
   const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+  const axiosSecure = useAxiosSecure();
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -17,16 +19,18 @@ const Cart = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        fetch(`http://localhost:5000/carts/${id}`, {
-          method: 'DELETE',
-        })
-          .then((res) => res.json())
-          .then((data) => {
-            console.log('Delete response:', data); 
-            if (data.deletedCount > 0) {
+        axiosSecure
+          .delete(`/carts/${id}`)
+          .then((res) => {
+            console.log('Delete response:', res.data);
+            if (res.data.deletedCount > 0) {
               Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
               refetch();
             }
+          })
+          .catch((error) => {
+            console.error('Delete error:', error);
+            Swal.fire('Error', 'Something went wrong while deleting.', 'error');
           });
       }
     });
