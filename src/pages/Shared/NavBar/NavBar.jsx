@@ -23,15 +23,16 @@ const NavBar = () => {
         <Link to="/contact">CONTACT us</Link>
       </li>
       <li>
+        <Link to="/dashboard/cart">Dashboard</Link>
+      </li>
+      <li>
         <Link to="/menu">Our Menu</Link>
       </li>
       <li>
-        <Link to="/dashboard/cart">
-          <button className="btn">
-            <MdShoppingCart className='mr-4'/>
-            <div className="badge badge-sm badge-secondary">+{cart.length}</div>
-          </button>
-        </Link>
+        <button className="mt-1">
+          <MdShoppingCart className="mr-1" />
+          <div className="badge badge-sm badge-secondary">{cart.length}</div>
+        </button>
       </li>
       <li>
         <Link to="/order/salad">Order Food</Link>
