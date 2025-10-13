@@ -3,11 +3,13 @@ import Main from '../Layout/Main';
 import Home from '../pages/Home/Home/Home';
 import Menu from './../pages/Menu/Menu';
 import Order from '../componenets/Order/Order/Order';
-import Login from '../pages/Login/Login';
 import SignUp from '../pages/SignUp/SignUp';
 import Contact from './../pages/Home/Contact/Contact';
 import Dashboard from '../Layout/Dashboard/Dashboard';
 import Cart from '../pages/Dashboard/Cart/Cart';
+import LogIn from '../pages/Login/Login';
+import PrivateRoute from './PrivateRoute';
+import AllUsers from '../pages/Dashboard/AllUsers/AllUsers';
 
 const router = createBrowserRouter([
   {
@@ -31,8 +33,8 @@ const router = createBrowserRouter([
         element: <Order />,
       },
       {
-        path: 'login',
-        element: <Login />,
+        path: 'logIn',
+        element: <LogIn />,
       },
       {
         path: 'signUp',
@@ -46,11 +48,17 @@ const router = createBrowserRouter([
   },
   {
     path: 'dashboard',
-    element: <Dashboard></Dashboard>,
+    element: <PrivateRoute><Dashboard></Dashboard></PrivateRoute>,
     children: [
       {
         path: 'cart',
         element: <Cart></Cart>,
+      },
+
+      // admin routes
+      {
+        path: 'users',
+        element: <AllUsers></AllUsers>
       },
     ],
   },

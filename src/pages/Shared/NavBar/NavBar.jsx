@@ -17,38 +17,53 @@ const NavBar = () => {
   const navOptions = (
     <>
       <li>
-        <Link to="/">Home</Link>
+        <Link to="/" className="text-orange-500 font-semibold">
+          Home
+        </Link>
       </li>
       <li>
-        <Link to="/contact">CONTACT us</Link>
+        <Link to="/contact" className="text-orange-500 font-semibold">
+          CONTACT us
+        </Link>
       </li>
       <li>
-        <Link to="/dashboard/cart">Dashboard</Link>
+        <Link to="/dashboard/cart" className="text-orange-500 font-semibold">
+          Dashboard
+        </Link>
       </li>
       <li>
-        <Link to="/menu">Our Menu</Link>
+        <Link to="/menu" className="text-orange-500 font-semibold">
+          Our Menu
+        </Link>
       </li>
       <li>
         <button className="mt-1">
-          <MdShoppingCart className="mr-1" />
+          <MdShoppingCart className="mr-1 text-orange-500 font-semibold drop-shadow-md" />
           <div className="badge badge-sm badge-secondary">{cart.length}</div>
         </button>
       </li>
       <li>
-        <Link to="/order/salad">Order Food</Link>
+        <Link to="/order/salad" className="text-orange-500 font-semibold">
+          Order Food
+        </Link>
       </li>
 
       {user ? (
         <>
-          <span>{user?.displayName}</span>
-          <button onClick={handleLogOut} className="btn btn-ghost">
+          <span className='text-orange-500 font-bold'>{user?.displayName}</span>
+          <button
+            onClick={handleLogOut}
+            className="btn btn-ghost text-orange-500 -mt-[6px] font-semibold"
+          >
             LogOut
           </button>
         </>
       ) : (
         <>
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login" className="text-orange-500 font-semibold">
+              Login
+            </Link>
           </li>
         </>
       )}

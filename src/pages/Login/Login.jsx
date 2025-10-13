@@ -1,3 +1,4 @@
+// Login.jsx
 import { useContext, useEffect, useState } from 'react';
 import {
   loadCaptchaEnginge,
@@ -7,20 +8,22 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import Swal from 'sweetalert2';
-import { AuthContext } from '../../providers/AuthProvider';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import LoginImg from '../../assets/others/authentication2.png';
-import '../../pages/Login/Login.css';
 
-const Login = () => {
+import { AuthContext } from '../../providers/AuthProvider';
+import LoginImg from '../../assets/others/authentication2.png';
+import './Login.css';
+import SocialLogin from '../../componenets/SocialLogin/SocialLogin';
+
+const LogIn = () => {
   const [disabled, setDisabled] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
+
   const { signIn } = useContext(AuthContext);
   const navigate = useNavigate();
   const location = useLocation();
 
   const from = location.state?.from?.pathname || '/';
-  console.log('state in the location login page', location.state)
 
   useEffect(() => {
     loadCaptchaEnginge(6);
@@ -31,13 +34,12 @@ const Login = () => {
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
+
     signIn(email, password)
       .then((result) => {
-        const user = result.user;
-        console.log(user);
         Swal.fire({
-          title: 'User Login Successful.',
+          title: 'Login Successful!',
+          icon: 'success',
           showClass: {
             popup: 'animate__animated animate__fadeInDown',
           },
@@ -48,7 +50,6 @@ const Login = () => {
         navigate(from, { replace: true });
       })
       .catch((error) => {
-        console.error('Login Error:', error.message);
         Swal.fire({
           icon: 'error',
           title: 'Login Failed',
@@ -58,12 +59,8 @@ const Login = () => {
   };
 
   const handleValidateCaptcha = (e) => {
-    const user_captcha_value = e.target.value;
-    if (validateCaptcha(user_captcha_value)) {
-      setDisabled(false);
-    } else {
-      setDisabled(true);
-    }
+    const userCaptchaValue = e.target.value;
+    setDisabled(!validateCaptcha(userCaptchaValue));
   };
 
   return (
@@ -71,12 +68,14 @@ const Login = () => {
       <Helmet>
         <title>Bistro Boss | Login</title>
       </Helmet>
+
       <div className="hero min-h-screen bg-base-200">
         <div className="hero-content flex-col md:flex-row-reverse">
-           <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
+          {/* Login Card */}
+          <div className="card md:w-1/2 max-w-sm shadow-2xl bg-base-100">
             <h1 className="text-3xl text-center pt-10 font-bold">Login now!</h1>
             <form onSubmit={handleLogin} className="card-body">
-              {/* Email Field */}
+              {/* Email */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Email</span>
@@ -90,7 +89,7 @@ const Login = () => {
                 />
               </div>
 
-              {/* Password Field with Toggle */}
+              {/* Password */}
               <div className="form-control">
                 <label className="label">
                   <span className="label-text">Password</span>
@@ -127,12 +126,12 @@ const Login = () => {
                   onBlur={handleValidateCaptcha}
                   type="text"
                   name="captcha"
-                  placeholder="type the captcha above"
+                  placeholder="Type the captcha above"
                   className="input input-bordered"
                 />
               </div>
 
-              {/* Submit Button */}
+              {/* Submit */}
               <div className="form-control mt-6">
                 <input
                   disabled={disabled}
@@ -142,17 +141,26 @@ const Login = () => {
                 />
               </div>
 
-              {/* Signup Link */}
-              <p className="text-center mx-auto">
+              {/* Sign Up link */}
+              <p className="text-center mt-5 mx-auto">
                 <small>
-                  New Here? <Link to="/signup">Create an account</Link>{' '}
+                  New here?{' '}
+                  <Link to="/signup" className="text-blue-700 font-bold">
+                    Create an account
+                  </Link>
                 </small>
               </p>
+
+              {/* Social Login */}
+              <div className="mx-auto">
+                <SocialLogin />
+              </div>
             </form>
           </div>
-          {/* Login Image  */}
+
+          {/* Image */}
           <div className="text-center md:w-1/2 lg:text-left">
-            <img src={LoginImg} alt="" />
+            <img src={LoginImg} alt="Login Illustration" />
           </div>
         </div>
       </div>
@@ -160,4 +168,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LogIn;
