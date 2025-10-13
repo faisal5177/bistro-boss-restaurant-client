@@ -42,31 +42,31 @@ const Dashboard = () => {
             <>
               <li>
                 <NavLink to="/dashboard/adminHome">
-                  <FaHome></FaHome>
+                  <FaHome />
                   Admin Home
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/addItems">
-                  <FaUtensils></FaUtensils>
-                  Add Items
+                <NavLink to="/dashboard/addItem">
+                  <FaUtensils />
+                  Add Item
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/manageItems">
-                  <FaList></FaList>
+                  <FaList />
                   Manage Items
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/bookings">
-                  <FaBook></FaBook>
+                  <FaBook />
                   Manage Bookings
                 </NavLink>
               </li>
               <li>
                 <NavLink to="/dashboard/users">
-                  <FaUsers></FaUsers>
+                  <FaUsers />
                   All Users
                 </NavLink>
               </li>
