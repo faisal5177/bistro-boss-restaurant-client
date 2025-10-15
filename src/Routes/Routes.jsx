@@ -12,11 +12,13 @@ import PrivateRoute from './PrivateRoute';
 import AllUsers from '../pages/Dashboard/AllUsers/AllUsers';
 import MyBookings from '../pages/Dashboard/MyBookings/MyBookings';
 import ManageBookings from '../pages/Dashboard/ManageBookings/ManageBookings';
-import AddItem from '../pages/Dashboard/AddItem/AddItem';
 import ManageItems from '../pages/Dashboard/ManageItems/ManageItems';
 import AdminHome from '../pages/Dashboard/AdminHome/AdminHome';
 import Reservation from '../pages/Dashboard/Reservation/Reservation';
 import AddReview from '../pages/Dashboard/AddReview/AddReview';
+import AdminRoute from './AdminRoute';
+import AddItem from '../pages/Dashboard/AddItem/AddItem';
+import UpdateItem from './../pages/Dashboard/UpdateItem/UpdateItem';
 
 const router = createBrowserRouter([
   {
@@ -61,33 +63,61 @@ const router = createBrowserRouter([
       </PrivateRoute>
     ),
     children: [
+      // admin only routes
       {
-        path: 'cart',
-        element: <Cart />,
+        path: 'adminHome',
+        element: (
+          <AdminRoute>
+            <AdminHome />
+          </AdminRoute>
+        ),
       },
       {
         path: 'users',
-        element: <AllUsers />,
+        element: (
+          <AdminRoute>
+            <AllUsers />
+          </AdminRoute>
+        ),
       },
       {
         path: 'bookings',
-        element: <ManageBookings />,
+        element: (
+          <AdminRoute>
+            <ManageBookings />
+          </AdminRoute>
+        ),
       },
       {
         path: 'addItem',
-        element: <AddItem />,
+        element: (
+          <AdminRoute>
+            <AddItem />
+          </AdminRoute>
+        ),
       },
       {
         path: 'manageItems',
-        element: <ManageItems />,
+        element: (
+          <AdminRoute>
+            <ManageItems />
+          </AdminRoute>
+        ),
       },
       {
-        path: 'adminHome',
-        element: <AdminHome />,
+        path: 'updateItem/:id',
+        element: <UpdateItem />,
+        loader: ({ params }) =>
+          fetch(`http://localhost:5000/menu/${params.id}`),
       },
+      //   normal user routes
       {
         path: 'reservation',
         element: <Reservation />,
+      },
+      {
+        path: 'cart',
+        element: <Cart />,
       },
       {
         path: 'review',

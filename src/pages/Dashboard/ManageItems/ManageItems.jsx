@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
 import { RiDeleteBin6Line } from 'react-icons/ri';
+import { Link } from 'react-router-dom';
 
 const ManageItems = () => {
   const axiosSecure = useAxiosSecure();
@@ -70,7 +71,9 @@ const ManageItems = () => {
                   >
                     <RiDeleteBin6Line />
                   </button>
-                  {/* Optional Edit Button */}
+                  <Link to={`/dashboard/updateItem/${_id}`}>
+                  <button className="btn btn-sm">Edit</button>
+                </Link>
                 </td>
               </tr>
             ))}
