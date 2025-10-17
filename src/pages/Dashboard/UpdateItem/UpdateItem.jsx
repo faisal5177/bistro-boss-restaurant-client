@@ -1,84 +1,63 @@
-import { useLoaderData } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import { useLoaderData } from 'react-router-dom';
+import useAxiosPublic from './../../../hooks/useAxiosPublic';
+import useAxiosSecure from './../../../hooks/useAxiosSecure';
+import SectionTitle from './../../../componenets/SectionTitle/SectionTitle';
 import Swal from 'sweetalert2';
-import useAxiosPublic from '../../../hooks/useAxiosPublic';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import SectionTitle from '../../../componenets/SectionTitle/SectionTitle';
 
-// ✅ ইমেজ হোস্টিং কী ও API লিংক
+
 const image_hosting_key = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const image_hosting_api = `https://api.imgbb.com/1/upload?key=${image_hosting_key}`;
-
 const UpdateItem = () => {
-  // ✅ লোডার থেকে ডেটা আনো
-  const { name, category, recipe, price, _id, image } = useLoaderData();
+  const { name, category, recipe, price, _id } = useLoaderData();
 
   const { register, handleSubmit } = useForm();
   const axiosPublic = useAxiosPublic();
   const axiosSecure = useAxiosSecure();
-
-  // ✅ ফর্ম সাবমিট হ্যান্ডলার
   const onSubmit = async (data) => {
-    try {
-      console.log('Form data:', data);
-      let imageUrl = image; // পুরনো image default হিসেবে থাকবে
-
-      // 🖼️ যদি নতুন image দেয়া হয়, তাহলে upload করো
-      if (data.image && data.image.length > 0) {
-        const formData = new FormData();
-        formData.append('image', data.image[0]);
-
-        const res = await axiosPublic.post(image_hosting_api, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
-
-        if (res.data.success) {
-          imageUrl = res.data.data.display_url;
-        } else {
-          Swal.fire('Image upload failed!', '', 'error');
-          return;
-        }
-      }
-
-      // ✅ Updated item তৈরি করো
-      const updatedItem = {
+    console.log(data);
+    // image upload to imgbb and then get an url
+    const imageFile = { image: data.image[0] };
+    const res = await axiosPublic.post(image_hosting_api, imageFile, {
+      headers: {
+        'content-type': 'multipart/form-data',
+      },
+    });
+    if (res.data.success) {
+      // now send the menu item data to the server with the image url
+      const menuItem = {
         name: data.name,
         category: data.category,
         price: parseFloat(data.price),
         recipe: data.recipe,
-        image: imageUrl,
+        image: res.data.data.display_url,
       };
-
-      // 🔁 PATCH request পাঠাও backend এ
-      const menuRes = await axiosSecure.patch(`/menu/${_id}`, updatedItem);
-      console.log('Update Response:', menuRes.data);
-
+      //
+      const menuRes = await axiosSecure.patch(`/menu/${_id}`, menuItem);
+      console.log(menuRes.data);
       if (menuRes.data.modifiedCount > 0) {
+        // show success popup
+        // reset();
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: `${data.name} has been updated successfully!`,
+          title: `${data.name} is updated to the menu.`,
           showConfirmButton: false,
           timer: 1500,
         });
-      } else {
-        Swal.fire('No changes detected.', '', 'info');
       }
-    } catch (error) {
-      console.error('Update error:', error);
-      Swal.fire('Something went wrong!', error.message, 'error');
     }
+    console.log('with image url', res.data);
   };
 
   return (
     <div>
-      <SectionTitle heading="Update an Item" subHeading="Refresh info" />
-
-      <div className="bg-base-200 p-8 rounded-xl">
+      <SectionTitle
+        heading="Update an Item"
+        subHeading="Refresh info"
+      ></SectionTitle>
+      <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          {/* Recipe Name */}
           <div className="form-control w-full my-6">
             <label className="label">
               <span className="label-text">Recipe Name*</span>
@@ -88,13 +67,12 @@ const UpdateItem = () => {
               defaultValue={name}
               placeholder="Recipe Name"
               {...register('name', { required: true })}
+              required
               className="input input-bordered w-full"
             />
           </div>
-
-          {/* Category & Price */}
-          <div className="flex flex-col md:flex-row gap-6">
-            {/* Category */}
+          <div className="flex gap-6">
+            {/* category */}
             <div className="form-control w-full my-6">
               <label className="label">
                 <span className="label-text">Category*</span>
@@ -115,7 +93,7 @@ const UpdateItem = () => {
               </select>
             </div>
 
-            {/* Price */}
+            {/* price */}
             <div className="form-control w-full my-6">
               <label className="label">
                 <span className="label-text">Price*</span>
@@ -129,8 +107,7 @@ const UpdateItem = () => {
               />
             </div>
           </div>
-
-          {/* Recipe Details */}
+          {/* recipe details */}
           <div className="form-control">
             <label className="label">
               <span className="label-text">Recipe Details</span>
@@ -139,27 +116,19 @@ const UpdateItem = () => {
               defaultValue={recipe}
               {...register('recipe')}
               className="textarea textarea-bordered h-24"
-              placeholder="Details"
+              placeholder="Bio"
             ></textarea>
           </div>
 
-          {/* Image Upload */}
           <div className="form-control w-full my-6">
-            <label className="label">
-              <span className="label-text">Upload New Image (optional)</span>
-            </label>
             <input
-              {...register('image')}
+              {...register('image', { required: true })}
               type="file"
-              accept="image/*"
               className="file-input w-full max-w-xs"
             />
           </div>
 
-          {/* Submit Button */}
-          <button type="submit" className="btn btn-primary">
-            Update Menu Item
-          </button>
+          <button className="btn">Update menu Item</button>
         </form>
       </div>
     </div>

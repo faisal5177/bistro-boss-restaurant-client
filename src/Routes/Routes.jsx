@@ -18,7 +18,7 @@ import Reservation from '../pages/Dashboard/Reservation/Reservation';
 import AddReview from '../pages/Dashboard/AddReview/AddReview';
 import AdminRoute from './AdminRoute';
 import AddItem from '../pages/Dashboard/AddItem/AddItem';
-import UpdateItem from './../pages/Dashboard/UpdateItem/UpdateItem';
+import UpdateItem from '../pages/Dashboard/UpdateItem/UpdateItem';
 
 const router = createBrowserRouter([
   {
@@ -64,6 +64,7 @@ const router = createBrowserRouter([
     ),
     children: [
       // admin only routes
+
       {
         path: 'adminHome',
         element: (
@@ -106,10 +107,15 @@ const router = createBrowserRouter([
       },
       {
         path: 'updateItem/:id',
-        element: <UpdateItem />,
+        element: (
+          <AdminRoute>
+            <UpdateItem></UpdateItem>
+          </AdminRoute>
+        ),
         loader: ({ params }) =>
           fetch(`http://localhost:5000/menu/${params.id}`),
       },
+
       //   normal user routes
       {
         path: 'reservation',

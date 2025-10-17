@@ -1,4 +1,3 @@
-import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { RiDeleteBin5Line } from 'react-icons/ri';
 import Swal from 'sweetalert2';
@@ -74,7 +73,7 @@ const ManageBookings = () => {
               <th>Date</th>
               <th>Time</th>
               <th>Activity</th>
-              <th>Action</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -87,7 +86,7 @@ const ManageBookings = () => {
                   <td>{booking.date}</td>
                   <td>{booking.time}</td>
                   <td>{booking.activity}</td>
-                  <td>
+                  <td className="flex gap-2">
                     <button
                       onClick={() => handleDelete(booking._id)}
                       className="btn btn-ghost"

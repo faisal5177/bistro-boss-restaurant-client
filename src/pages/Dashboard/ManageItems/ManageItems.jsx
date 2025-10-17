@@ -1,87 +1,92 @@
-// src/pages/Dashboard/ManageItems/ManageItems.jsx
-import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import useMenu from './../../../hooks/useMenu';
+import SectionTitle from './../../../componenets/SectionTitle/SectionTitle';
+import { RiDeleteBin5Line } from 'react-icons/ri';
+import { FaEdit } from 'react-icons/fa';
 import Swal from 'sweetalert2';
-import { RiDeleteBin6Line } from 'react-icons/ri';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import { Link } from 'react-router-dom';
 
 const ManageItems = () => {
+  const [menu, loading, refetch] = useMenu();
   const axiosSecure = useAxiosSecure();
 
-  const { data: menu = [], refetch } = useQuery({
-    queryKey: ['menu'],
-    queryFn: async () => {
-      const res = await axiosSecure.get('/menu');
-      return res.data;
-    },
-  });
-
-  const handleDelete = (id) => {
+  const handleDeleteItem = (item) => {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This item will be deleted permanently.',
+      text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/menu/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            Swal.fire('Deleted!', 'Item has been deleted.', 'success');
-            refetch();
-          }
-        });
+        const res = await axiosSecure.delete(`/menu/${item._id}`);
+        if (res.data.deletedCount > 0) {
+          refetch();
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: `${item.name} has been deleted`,
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
       }
     });
   };
 
   return (
-    <div className="p-6">
-      <h2 className="text-3xl font-semibold mb-4">Manage Menu Items</h2>
+    <div>
+      <SectionTitle heading="Manage All Items" subHeading="Hurry up" />
       <div className="overflow-x-auto">
         <table className="table w-full">
           <thead>
             <tr>
               <th>#</th>
-              <th>Item</th>
-              <th>Category</th>
-              <th>Price</th>
               <th>Image</th>
-              <th>Actions</th>
+              <th>Item Name</th>
+              <th>Price</th>
+              <th>Update</th>
+              <th>Delete</th>
             </tr>
           </thead>
           <tbody>
             {menu.map((item, index) => (
               <tr key={item._id}>
                 <td>{index + 1}</td>
-                <td>{item.name}</td>
-                <td>{item.category}</td>
-                <td>${item.price}</td>
                 <td>
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="w-12 h-12 object-cover"
-                  />
+                  <div className="flex items-center gap-3">
+                    <div className="avatar">
+                      <div className="mask mask-squircle h-12 w-12">
+                        <img src={item.image} alt={item.name} />
+                      </div>
+                    </div>
+                  </div>
+                </td>
+                <td>{item.name}</td>
+                <td className="text-center">${item.price}</td>
+                <td>
+                  <Link to={`/dashboard/updateItem/${item._id}`}>
+                    <button className="btn btn-ghost btn-lg bg-orange-500">
+                      <FaEdit
+                        className="text-white "
+                      ></FaEdit>
+                    </button>
+                  </Link>
                 </td>
                 <td>
                   <button
-                    className="btn btn-ghost text-red-600 text-xl"
-                    onClick={() => handleDelete(item._id)}
+                    onClick={() => handleDeleteItem(item)}
+                    className="btn btn-ghost"
                   >
-                    <RiDeleteBin6Line />
+                    <RiDeleteBin5Line className="text-red-700 text-lg" />
                   </button>
-                  <Link to={`/dashboard/updateItem/${_id}`}>
-                  <button className="btn btn-sm">Edit</button>
-                </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        {menu.length === 0 && (
-          <p className="text-center text-gray-500 mt-6">No items found.</p>
-        )}
       </div>
     </div>
   );
