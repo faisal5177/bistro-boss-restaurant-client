@@ -19,6 +19,8 @@ import AddReview from '../pages/Dashboard/AddReview/AddReview';
 import AdminRoute from './AdminRoute';
 import AddItem from '../pages/Dashboard/AddItem/AddItem';
 import UpdateItem from '../pages/Dashboard/UpdateItem/UpdateItem';
+import Payment from '../pages/Dashboard/Payment/Payment';
+import UserHome from '../pages/Dashboard/UserHome/UserHome';
 
 const router = createBrowserRouter([
   {
@@ -82,7 +84,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'bookings',
+        path: 'manageBookings',
         element: (
           <AdminRoute>
             <ManageBookings />
@@ -126,12 +128,20 @@ const router = createBrowserRouter([
         element: <Cart />,
       },
       {
+        path: 'payment',
+        element: <Payment></Payment>
+      },
+      {
         path: 'review',
         element: <AddReview />,
       },
       {
-        path: 'myBookings',
+        path: 'bookings',
         element: <MyBookings />,
+      },
+      {
+        path: 'userHome',
+        element: <UserHome></UserHome>
       },
     ],
   },
