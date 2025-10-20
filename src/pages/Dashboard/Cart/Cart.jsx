@@ -1,15 +1,16 @@
-import Swal from 'sweetalert2';
+import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
-import { FaTrashAlt } from 'react-icons/fa';
+import Swal from 'sweetalert2';
 import useCart from '../../../hooks/useCart';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 const Cart = () => {
   const [cart, refetch] = useCart();
-  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
   const axiosSecure = useAxiosSecure();
 
-  const handleDelete = (id) => {
+  const totalPrice = cart.reduce((total, item) => total + item.price, 0);
+
+  const handleDelete = (item) => {
     Swal.fire({
       title: 'Are you sure?',
       text: "You won't be able to revert this!",
@@ -20,14 +21,10 @@ const Cart = () => {
       confirmButtonText: 'Yes, delete it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        axiosSecure.delete(`/carts/${id}`).then((res) => {
+        axiosSecure.delete(`/carts/${item._id}`).then((res) => {
           if (res.data.deletedCount > 0) {
             refetch();
-            Swal.fire({
-              title: 'Deleted!',
-              text: 'Your file has been deleted.',
-              icon: 'success',
-            });
+            Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
           }
         });
       }
@@ -35,58 +32,62 @@ const Cart = () => {
   };
 
   return (
-    <div>
-      <div className="flex justify-evenly mb-8">
-        <h2 className="text-4xl">Items: {cart.length}</h2>
-        <h2 className="text-4xl">Total Price: {totalPrice}</h2>
-        {cart.length ? (
-          <Link to="/dashboard/payment">
-            <button className="btn btn-primary">Pay</button>
-          </Link>
-        ) : (
-          <button disabled className="btn btn-primary">
+    <div className="px-4 md:px-8">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+        <h3 className="text-2xl md:text-3xl font-semibold">
+          Total Items: {cart.length}
+        </h3>
+        <h3 className="text-2xl md:text-3xl font-semibold">
+          Total Price: ${totalPrice.toFixed(2)}
+        </h3>
+        <Link to="/dashboard/payment">
+          <button
+            className="btn btn-warning btn-sm md:btn-md font-semibold"
+            disabled={cart.length === 0}
+          >
             Pay
           </button>
-        )}
+        </Link>
       </div>
-      <div className="overflow-x-auto">
-        <table className="table  w-full">
-          {/* head */}
-          <thead>
+
+      {/* Table Section */}
+      <div className="overflow-x-auto shadow-md rounded-lg">
+        <table className="table table-zebra w-full text-center">
+          <thead className="bg-gray-100 text-gray-700">
             <tr>
-              <th>#</th>
-              <th>Image</th>
-              <th>Name</th>
-              <th>Price</th>
-              <th>Action</th>
+              <th className="w-[5%]">#</th>
+              <th className="w-[12%]">Image</th>
+              <th className="w-[45%]">Item Name</th>
+              <th className="w-[20%]">Price</th>
+              <th className="w-[10%]">Action</th>
             </tr>
           </thead>
           <tbody>
             {cart.map((item, index) => (
-              <tr key={item._id}>
-                <th>{index + 1}</th>
+              <tr key={item._id} className="hover">
+                <td>{index + 1}</td>
                 <td>
-                  <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div className="mask mask-squircle w-12 h-12">
-                        <img
-                          src={item.image}
-                          alt="Avatar Tailwind CSS Component"
-                        />
-                      </div>
-                    </div>
+                  <div className="w-12 h-12 mx-auto rounded overflow-hidden border">
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
                   </div>
                 </td>
-                <td>{item.name}</td>
-                <td>${item.price}</td>
-                <th>
+                <td className="font-medium">{item.name}</td>
+                <td>${item.price.toFixed(2)}</td>
+                <td>
                   <button
-                    onClick={() => handleDelete(item._id)}
-                    className="btn btn-ghost btn-lg"
+                    onClick={() => handleDelete(item)}
+                    className="btn btn-ghost btn-xs text-red-600 hover:bg-red-100"
+                    title="Delete Item"
                   >
-                    <FaTrashAlt className="text-red-600"></FaTrashAlt>
+                    <RiDeleteBin6Fill size={18} />
                   </button>
-                </th>
+                </td>
               </tr>
             ))}
           </tbody>

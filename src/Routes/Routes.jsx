@@ -5,12 +5,9 @@ import Menu from './../pages/Menu/Menu';
 import Order from '../componenets/Order/Order/Order';
 import SignUp from '../pages/SignUp/SignUp';
 import Contact from './../pages/Home/Contact/Contact';
-import Dashboard from '../Layout/Dashboard/Dashboard';
-import Cart from '../pages/Dashboard/Cart/Cart';
 import LogIn from '../pages/Login/Login';
 import PrivateRoute from './PrivateRoute';
 import AllUsers from '../pages/Dashboard/AllUsers/AllUsers';
-import MyBookings from '../pages/Dashboard/MyBookings/MyBookings';
 import ManageBookings from '../pages/Dashboard/ManageBookings/ManageBookings';
 import ManageItems from '../pages/Dashboard/ManageItems/ManageItems';
 import AdminHome from '../pages/Dashboard/AdminHome/AdminHome';
@@ -19,8 +16,11 @@ import AddReview from '../pages/Dashboard/AddReview/AddReview';
 import AdminRoute from './AdminRoute';
 import AddItem from '../pages/Dashboard/AddItem/AddItem';
 import UpdateItem from '../pages/Dashboard/UpdateItem/UpdateItem';
-import Payment from '../pages/Dashboard/Payment/Payment';
 import UserHome from '../pages/Dashboard/UserHome/UserHome';
+import Payment from '../pages/Dashboard/Payment/Payment';
+import PaymentHistory from '../pages/Dashboard/PaymentHistory/PaymentHistory';
+import Cart from '../pages/Dashboard/Cart/Cart';
+import Dashboard from '../Layout/Dashboard/Dashboard';
 
 const router = createBrowserRouter([
   {
@@ -129,19 +129,19 @@ const router = createBrowserRouter([
       },
       {
         path: 'payment',
-        element: <Payment></Payment>
+        element: <Payment />,
+      },
+      {
+        path: 'paymentHistory',
+        element: <PaymentHistory />,
       },
       {
         path: 'review',
         element: <AddReview />,
       },
       {
-        path: 'bookings',
-        element: <MyBookings />,
-      },
-      {
         path: 'userHome',
-        element: <UserHome></UserHome>
+        element: <UserHome></UserHome>,
       },
     ],
   },

@@ -35,31 +35,33 @@ const UserHome = () => {
       {/* Quick Links */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="p-6 border rounded shadow hover:shadow-lg transition">
-          <FaHome className="text-orange-500 text-3xl mb-3" />
-          <h3 className="text-xl font-bold mb-2">My Home</h3>
-          <p className="text-gray-600">
-            Overview of your dashboard, cart, and activities.
-          </p>
-        </div>
-
-        <div className="p-6 border rounded shadow hover:shadow-lg transition">
-          <Link to='/dashboard/cart'>
-          <FaShoppingCart className="text-orange-500 text-3xl mb-3" />
-          <h3 className="text-xl font-bold mb-2">My Cart</h3>
+          <Link to="/">
+            <FaHome className="text-orange-500 text-3xl mb-3" />
+            <h3 className="text-xl font-bold mb-2">My Home</h3>
+            <p className="text-gray-600">
+              Overview of your dashboard, cart, and activities.
+            </p>
           </Link>
-          <p className="text-gray-600">
-            Check your selected items and proceed to payment.
-          </p>
         </div>
 
         <div className="p-6 border rounded shadow hover:shadow-lg transition">
-         <Link to="/dashboard/reservation">
-          <FaHome className="text-orange-500 text-3xl mb-3" />
-          <h3 className="text-xl font-bold mb-2">Reservations</h3>
-         </Link>
-          <p className="text-gray-600">
-            Manage your table bookings and upcoming reservations.
-          </p>
+          <Link to="/dashboard/cart">
+            <FaShoppingCart className="text-orange-500 text-3xl mb-3" />
+            <h3 className="text-xl font-bold mb-2">My Cart</h3>
+            <p className="text-gray-600">
+              Check your selected items and proceed to payment.
+            </p>
+          </Link>
+        </div>
+
+        <div className="p-6 border rounded shadow hover:shadow-lg transition">
+          <Link to="/dashboard/reservation">
+            <FaHome className="text-orange-500 text-3xl mb-3" />
+            <h3 className="text-xl font-bold mb-2">Reservations</h3>
+            <p className="text-gray-600">
+              Manage your table bookings and upcoming reservations.
+            </p>
+          </Link>
         </div>
       </div>
     </div>

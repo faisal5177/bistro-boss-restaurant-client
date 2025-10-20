@@ -19,7 +19,7 @@ const Dashboard = () => {
   const [isAdmin] = useAdmin();
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       {/* Dashboard Side Bar */}
       <div className="w-64 min-h-screen bg-orange-400">
         <div className="">
@@ -80,6 +80,12 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
+                <NavLink to="/dashboard/paymentHistory">
+                  <FaCalendar></FaCalendar>
+                  Payment History
+                </NavLink>
+              </li>
+              <li>
                 <NavLink to="/dashboard/reservation">
                   <FaCalendar></FaCalendar>
                   Reservation
@@ -98,7 +104,7 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/dashboard/bookings">
+                <NavLink to="/dashboard/paymentHistory">
                   <FaList></FaList>
                   My Bookings
                 </NavLink>
