@@ -17,10 +17,10 @@ import AdminRoute from './AdminRoute';
 import AddItem from '../pages/Dashboard/AddItem/AddItem';
 import UpdateItem from '../pages/Dashboard/UpdateItem/UpdateItem';
 import UserHome from '../pages/Dashboard/UserHome/UserHome';
-import Payment from '../pages/Dashboard/Payment/Payment';
-import PaymentHistory from '../pages/Dashboard/PaymentHistory/PaymentHistory';
 import Cart from '../pages/Dashboard/Cart/Cart';
 import Dashboard from '../Layout/Dashboard/Dashboard';
+import Payment from '../pages/Dashboard/Payment/Payment';
+import PaymentHistory from '../pages/Dashboard/PaymentHistory/PaymentHistory';
 
 const router = createBrowserRouter([
   {
@@ -133,7 +133,7 @@ const router = createBrowserRouter([
       },
       {
         path: 'paymentHistory',
-        element: <PaymentHistory />,
+        element: <PaymentHistory></PaymentHistory>,
       },
       {
         path: 'review',
