@@ -5,11 +5,9 @@ import Menu from './../pages/Menu/Menu';
 import Order from '../componenets/Order/Order/Order';
 import SignUp from '../pages/SignUp/SignUp';
 import Contact from './../pages/Home/Contact/Contact';
-import LogIn from '../pages/Login/Login';
+import LogIn from '../pages/LogIn/LogIn';
 import PrivateRoute from './PrivateRoute';
 import AllUsers from '../pages/Dashboard/AllUsers/AllUsers';
-import ManageBookings from '../pages/Dashboard/ManageBookings/ManageBookings';
-import ManageItems from '../pages/Dashboard/ManageItems/ManageItems';
 import AdminHome from '../pages/Dashboard/AdminHome/AdminHome';
 import Reservation from '../pages/Dashboard/Reservation/Reservation';
 import AddReview from '../pages/Dashboard/AddReview/AddReview';
@@ -21,6 +19,7 @@ import Cart from '../pages/Dashboard/Cart/Cart';
 import Dashboard from '../Layout/Dashboard/Dashboard';
 import Payment from '../pages/Dashboard/Payment/Payment';
 import PaymentHistory from '../pages/Dashboard/PaymentHistory/PaymentHistory';
+import MyBookings from '../pages/MyBookings/MyBookings';
 
 const router = createBrowserRouter([
   {
@@ -84,26 +83,10 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: 'manageBookings',
-        element: (
-          <AdminRoute>
-            <ManageBookings />
-          </AdminRoute>
-        ),
-      },
-      {
         path: 'addItem',
         element: (
           <AdminRoute>
             <AddItem />
-          </AdminRoute>
-        ),
-      },
-      {
-        path: 'manageItems',
-        element: (
-          <AdminRoute>
-            <ManageItems />
           </AdminRoute>
         ),
       },
@@ -142,6 +125,10 @@ const router = createBrowserRouter([
       {
         path: 'userHome',
         element: <UserHome></UserHome>,
+      },
+      {
+        path: 'myBookings',
+        element: <MyBookings></MyBookings>
       },
     ],
   },

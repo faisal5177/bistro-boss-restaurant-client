@@ -17,7 +17,7 @@ const Reservation = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axiosSecure.post('/bookings', formData);
+      await axiosSecure.post('/payment', formData);
       alert('Reservation successful');
       setFormData({ date: '', time: '', activity: '', phone: '' });
     } catch (error) {
@@ -70,7 +70,7 @@ const Reservation = () => {
           type="submit"
           className="w-full py-3 bg-orange-500 text-white font-bold rounded-md hover:bg-orange-600 transition-colors"
         >
-          Book
+          Add
         </button>
       </form>
     </div>

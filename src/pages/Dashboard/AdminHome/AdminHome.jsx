@@ -1,83 +1,158 @@
-import React from 'react';
-import { Bar, Pie } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { FaBook, FaDollarSign, FaUsers } from 'react-icons/fa';
+import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, PieChart, Pie, Legend } from 'recharts';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosSecure from '../../../hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  ArcElement,
-  Tooltip,
-  Legend
-);
+
+const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', 'red', 'pink'];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const AdminHome = () => {
-  const summaryData = [
-    { label: 'Revenue', value: 1000, color: 'bg-purple-500' },
-    { label: 'Customers', value: 1500, color: 'bg-yellow-400' },
-    { label: 'Products', value: 103, color: 'bg-pink-400' },
-    { label: 'Orders', value: 500, color: 'bg-blue-400' },
-  ];
+    const { user } = useAuth();
+    const axiosSecure = useAxiosSecure();
 
-  const barData = {
-    labels: ['Dessert', 'Pizza', 'Salad', 'Soup'],
-    datasets: [
-      {
-        label: 'Sold',
-        data: [30, 35, 20, 25],
-        backgroundColor: ['orange', 'blue', 'green', 'red'],
-      },
-    ],
-  };
+    const { data: stats = {} } = useQuery({
+        queryKey: ['admin-stats'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/admin-stats');
+            return res.data;
+        }
+    });
 
-  const pieData = {
-    labels: ['Dessert', 'Pizza', 'Salad', 'Soup'],
-    datasets: [
-      {
-        data: [21, 25, 28, 31],
-        backgroundColor: ['blue', 'red', 'orange', 'green'],
-      },
-    ],
-  };
+    const { data: chartData = [] } = useQuery({
+        queryKey: ['order-stats'],
+        queryFn: async () => {
+            const res = await axiosSecure.get('/order-stats');
+            return res.data;
+        }
+    })
 
-  return (
-    <div className="p-6 font-sans">
-      <h2 className="text-2xl font-bold mb-4">Hi, Welcome Back!</h2>
+    // custom shape for the bar chart
+    const getPath = (x, y, width, height) => {
+        return `M${x},${y + height}C${x + width / 3},${y + height} ${x + width / 2},${y + height / 3}
+        ${x + width / 2}, ${y}
+        C${x + width / 2},${y + height / 3} ${x + (2 * width) / 3},${y + height} ${x + width}, ${y + height}
+        Z`;
+    };
 
-      {/* Summary Boxes */}
-      <div className="grid grid-cols-4 gap-4 mb-8">
-        {summaryData.map((item, index) => (
-          <div
-            key={index}
-            className={`p-4 text-white rounded shadow ${item.color}`}
-          >
-            <h3 className="text-lg">{item.label}</h3>
-            <p className="text-2xl font-semibold">{item.value}</p>
-          </div>
-        ))}
-      </div>
+    const TriangleBar = (props) => {
+        const { fill, x, y, width, height } = props;
 
-      {/* Charts Section */}
-      <div className="grid grid-cols-2 gap-8">
+        return <path d={getPath(x, y, width, height)} stroke="none" fill={fill} />;
+    };
+
+    // custom shape for the pie chart
+    const RADIAN = Math.PI / 180;
+    const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
+        const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+        return (
+            <text x={x} y={y} fill="white" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
+                {`${(percent * 100).toFixed(0)}%`}
+            </text>
+        );
+    };
+
+    const pieChartData = chartData.map(data => {
+        return {name: data.category, value: data.revenue}
+    })
+
+    return (
         <div>
-          <h3 className="text-xl font-semibold mb-2">Items Sold</h3>
-          <Bar data={barData} />
+            <h2 className="text-3xl">
+                <span>Hi, Welcome </span>
+                {
+                    user?.displayName ? user.displayName : 'Back'
+                }
+            </h2>
+            <div className="stats shadow">
+
+                <div className="stat">
+                    <div className="stat-figure text-secondary">
+                        <FaDollarSign className='text-3xl'></FaDollarSign>
+                    </div>
+                    <div className="stat-title">Revenue</div>
+                    <div className="stat-value">${stats.revenue}</div>
+                    <div className="stat-desc">Jan 1st - Feb 1st</div>
+                </div>
+
+                <div className="stat">
+                    <div className="stat-figure text-secondary">
+                        <FaUsers className='text-3xl'></FaUsers>
+                    </div>
+                    <div className="stat-title">Users</div>
+                    <div className="stat-value">{stats.users}</div>
+                    <div className="stat-desc">↗︎ 400 (22%)</div>
+                </div>
+
+
+                <div className="stat">
+                    <div className="stat-figure text-secondary">
+                        <FaBook className='text-3xl'></FaBook>
+                    </div>
+                    <div className="stat-title">Menu Items</div>
+                    <div className="stat-value">{stats.menuItems}</div>
+                    <div className="stat-desc">↗︎ 400 (22%)</div>
+                </div>
+
+                <div className="stat">
+                    <div className="stat-figure text-secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-8 h-8 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path></svg>
+                    </div>
+                    <div className="stat-title">Orders</div>
+                    <div className="stat-value">{stats.orders}</div>
+                    <div className="stat-desc">↘︎ 90 (14%)</div>
+                </div>
+
+            </div>
+            <div className="flex">
+                <div className="w-1/2">
+                    <BarChart
+                        width={500}
+                        height={300}
+                        data={chartData}
+                        margin={{
+                            top: 20,
+                            right: 30,
+                            left: 20,
+                            bottom: 5,
+                        }}
+                    >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="category" />
+                        <YAxis />
+                        <Bar dataKey="quantity" fill="#8884d8" shape={<TriangleBar />} label={{ position: 'top' }}>
+                            {chartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={colors[index % 6]} />
+                            ))}
+                        </Bar>
+                    </BarChart>
+                </div>
+                <div className="w-1/2">
+                    <PieChart width={400} height={400}>
+                        <Pie
+                            data={pieChartData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            label={renderCustomizedLabel}
+                            outerRadius={80}
+                            fill="#8884d8"
+                            dataKey="value"
+                        >
+                            {pieChartData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Legend></Legend>
+                    </PieChart>
+                </div>
+            </div>
         </div>
-        <div>
-          <h3 className="text-xl font-semibold mb-2">Category Distribution</h3>
-          <Pie data={pieData} />
-        </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default AdminHome;
