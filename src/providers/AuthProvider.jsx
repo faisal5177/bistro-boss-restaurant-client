@@ -22,26 +22,25 @@ const AuthProvider = ({ children }) => {
   const googleProvider = new GoogleAuthProvider();
   const axiosPublic = useAxiosPublic();
 
+  //  Create new user with email & password
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
+  //  Sign in user
   const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  //  Google Sign in
   const googleSignIn = () => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  const logOut = () => {
-    setLoading(true);
-    return signOut(auth);
-  };
-
+  //  Update profile
   const updateUserProfile = (name, photo) => {
     return updateProfile(auth.currentUser, {
       displayName: name,
@@ -49,28 +48,35 @@ const AuthProvider = ({ children }) => {
     });
   };
 
+  //  Log out
+  const logOut = () => {
+    setLoading(true);
+    localStorage.removeItem('access-token'); // clean token
+    return signOut(auth);
+  };
+
+  //  Auth State Change
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+
       if (currentUser) {
-        // get token and store client
         const userInfo = { email: currentUser.email };
-        axiosPublic.post('/jwt', userInfo).then((res) => {
-          if (res.data.token) {
-            localStorage.setItem('access-token', res.data.token);
+        axiosPublic.post('/jwt', userInfo)
+          .then((res) => {
+            if (res.data.token) {
+              localStorage.setItem('access-token', res.data.token);
+            }
             setLoading(false);
-          }
-        });
+          })
+          .catch(() => setLoading(false));
       } else {
-        // TODO: remove token (if token stored in the client side: Local storage, caching, in memory)
         localStorage.removeItem('access-token');
         setLoading(false);
       }
-
     });
-    return () => {
-      return unsubscribe();
-    };
+
+    return () => unsubscribe();
   }, [axiosPublic]);
 
   const authInfo = {
@@ -79,12 +85,14 @@ const AuthProvider = ({ children }) => {
     createUser,
     signIn,
     googleSignIn,
-    logOut,
     updateUserProfile,
+    logOut,
   };
 
   return (
-    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={authInfo}>
+      {children}
+    </AuthContext.Provider>
   );
 };
 
