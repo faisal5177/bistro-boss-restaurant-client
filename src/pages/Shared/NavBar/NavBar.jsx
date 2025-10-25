@@ -44,7 +44,7 @@ const NavBar = () => {
       </li>
       {user ? (
         <>
-          <li className= "text-orange-500 hover:text-white">
+          <li className= "text-yellow-400 hover:text-white font-bold">
             <span>{user.displayName}</span>
           </li>
           <li className= "text-orange-500 hover:text-white">
