@@ -22,6 +22,6 @@ const MenuItems = () => {
       </ul>
     </div>
   );
-};
+};de
 
 export default MenuItems;
